@@ -8,7 +8,7 @@ internal class Program
     private static async Task Main(string[] args)
     {
         await using var stream = typeof(Program).Assembly
-    .GetManifestResourceStream(typeof(Program), "input.txt");
+            .GetManifestResourceStream(typeof(Program), "input.txt");
         using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
 
         int counter = 0;
