@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AoC.Day2;
+namespace AoC._2023.Day2;
 
 internal class Program
 {

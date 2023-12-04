@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AoC.Day3;
+namespace AoC._2023.Day3;
 
 internal class Program
 {

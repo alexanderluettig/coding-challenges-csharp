@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AoC.Day1;
+namespace AoC._2023.Day1;
 internal class Program
 {
     private static readonly string[] numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
