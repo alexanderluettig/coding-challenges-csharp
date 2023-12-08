@@ -28,7 +28,7 @@ internal class Program
         var currentDirection = 0;
 
         var distances = new long[current.Length];
-        distances.Select(x => 0);
+        _ = distances.Select(x => 0);
 
         while (distances.Any(x => x == 0))
         {
