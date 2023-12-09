@@ -24,7 +24,7 @@ internal class Program
         }
 
         var numberOfSteps = 0;
-        var current = map.Keys.Where(k => k.EndsWith("A")).ToArray();
+        var current = map.Keys.Where(k => k.EndsWith('A')).ToArray();
         var currentDirection = 0;
 
         var distances = new long[current.Length];
