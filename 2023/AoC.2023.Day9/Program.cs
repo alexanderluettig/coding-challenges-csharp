@@ -17,6 +17,14 @@ internal class Program
             var list = CalculateNextRows(numbers);
 
             var temp = 0L;
+
+            //Part 1
+            // foreach (var row in list)
+            // {
+            //     temp += row.Last();
+            // }
+
+            //Part 2
             foreach (var row in list.Reverse())
             {
                 temp = row.First() - temp;
