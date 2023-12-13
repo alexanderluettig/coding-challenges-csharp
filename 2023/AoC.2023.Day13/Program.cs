@@ -6,7 +6,6 @@ namespace AoC._2023.Day13;
 
 internal class Program
 {
-    private const int AllowedSmudges = 1;
     private static async Task Main(string[] args)
     {
         await using var stream = typeof(Program).Assembly
@@ -98,10 +97,11 @@ internal class Program
             var bottomLine = i + 1;
 
             var isMirror = false;
-
             while (upperLine >= 0 && bottomLine < input.Length)
             {
-                if (string.Join("", input[upperLine]) != string.Join("", input[bottomLine]))
+                var topLine = string.Join("", input[upperLine]);
+                var botLine = string.Join("", input[bottomLine]);
+                if (topLine.NumberOfDifferences(botLine) > 0)
                 {
                     isMirror = false;
                     break;
