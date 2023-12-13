@@ -6,6 +6,7 @@ namespace AoC._2023.Day13;
 
 internal class Program
 {
+    private const int AllowedSmudges = 1;
     private static async Task Main(string[] args)
     {
         await using var stream = typeof(Program).Assembly
@@ -13,12 +14,14 @@ internal class Program
         using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
 
         string[][] input = [];
-        var result = 0;
+        var part1 = 0;
+        var part2 = 0;
         for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
         {
             if (line == "")
             {
-                result += CalculatePart1(input);
+                part1 += CalculatePart1(input);
+                part2 += CalculatePart2(input);
                 input = [];
                 continue;
             }
@@ -28,9 +31,11 @@ internal class Program
             }
         }
 
-        result += CalculatePart1(input);
+        part1 += CalculatePart1(input);
+        part2 += CalculatePart2(input);
 
-        Console.WriteLine($"Result: {result}");
+        Console.WriteLine($"Part 1: {part1}");
+        Console.WriteLine($"Part 2: {part2}");
     }
 
     private static int CalculatePart1(string[][] input)
@@ -43,7 +48,17 @@ internal class Program
         return HasMirror(input.Transpose(), out var column) ? column : 0;
     }
 
-    private static bool HasMirror(string[][] input, out int row)
+    private static int CalculatePart2(string[][] input)
+    {
+        if (HasMirrorWithSmudges(input, out var row))
+        {
+            return row * 100;
+        }
+
+        return HasMirrorWithSmudges(input.Transpose(), out var column) ? column : 0;
+    }
+
+    private static bool HasMirrorWithSmudges(string[][] input, out int row)
     {
         row = -1;
 
@@ -59,12 +74,48 @@ internal class Program
                 var botLine = string.Join("", input[bottomLine]);
 
                 numberOfSmudges += topLine.NumberOfDifferences(botLine);
-
                 upperLine--;
                 bottomLine++;
             }
 
             if (numberOfSmudges == 1)
+            {
+                row = i + 1;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool HasMirror(string[][] input, out int row)
+    {
+        row = -1;
+
+        for (var i = 0; i < input.Length; i++)
+        {
+            var upperLine = i;
+            var bottomLine = i + 1;
+
+            var isMirror = false;
+
+            while (upperLine >= 0 && bottomLine < input.Length)
+            {
+                if (string.Join("", input[upperLine]) != string.Join("", input[bottomLine]))
+                {
+                    isMirror = false;
+                    break;
+                }
+                else
+                {
+                    isMirror = true;
+                }
+
+                upperLine--;
+                bottomLine++;
+            }
+
+            if (isMirror)
             {
                 row = i + 1;
                 return true;
