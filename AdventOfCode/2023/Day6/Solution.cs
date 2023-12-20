@@ -1,20 +1,33 @@
-﻿using System.Text;
+﻿namespace AdventOfCode.Y2023.Day6;
 
-namespace AdventOfCode._2023.Day06;
-
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
+        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var times = inputLines[0][5..].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        var distances = inputLines[1][9..].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-        var time = long.Parse((await reader.ReadLineAsync())![5..].Replace(" ", ""));
-        var distance = long.Parse((await reader.ReadLineAsync())![9..].Replace(" ", ""));
+        var variations = 1;
 
-        var result = 1;
+        for (var i = 0; i < times.Length; i++)
+            variations *= CalculateWinVariations(long.Parse(times[i]), long.Parse(distances[i]));
 
+        return variations;
+    }
+
+    public override long SolvePartTwo()
+    {
+        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+        var time = long.Parse(inputLines[0][5..].Replace(" ", ""));
+        var distance = long.Parse(inputLines[1][9..].Replace(" ", ""));
+
+        return CalculateWinVariations(time, distance);
+    }
+
+    private static int CalculateWinVariations(long time, long distance)
+    {
         double p = -1 * time;
         double q = distance + 0.001;
         var x1 = -(p / 2) + Math.Sqrt(Math.Pow(p / 2, 2) - q);
@@ -23,9 +36,7 @@ internal class Solution
         var lowerBound = (int)Math.Ceiling(Math.Min(x1, x2));
         var upperBound = (int)Math.Floor(Math.Max(x1, x2));
 
-        result *= upperBound - lowerBound + 1;
-
-        Console.WriteLine(result);
+        return upperBound - lowerBound + 1;
     }
 }
 

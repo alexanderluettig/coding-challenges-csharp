@@ -1,5 +1,6 @@
-﻿using System.Text;
-using AdventOfCode.Y2023.Day4;
+﻿using System.Diagnostics;
+using System.Text;
+using AdventOfCode.Y2023.Day6;
 
 namespace AdventOfCode;
 internal class Program
@@ -16,7 +17,14 @@ internal class Program
             throw new Exception("Input is empty");
 
         var solution = new Solution(input);
+
+        Stopwatch sw = new();
+        sw.Start();
+
         Console.WriteLine($"Part1: {solution.SolvePartOne()}");
         Console.WriteLine($"Part2: {solution.SolvePartTwo()}");
+
+        sw.Stop();
+        Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds}ms");
     }
 }

@@ -17,4 +17,4 @@ It also contains a Library which implements useful algorithms for e.g. "Pathfind
 ## TODO
 
 - Refactor Project
-  - Refactor AdventOfCode 2023 => Status 4/16
+  - Refactor AdventOfCode 2023 => Status 6/16
