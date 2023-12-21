@@ -1,4 +1,4 @@
-﻿namespace Lib;
+﻿namespace Lib.Algorithms;
 
 public static class Combinations
 {

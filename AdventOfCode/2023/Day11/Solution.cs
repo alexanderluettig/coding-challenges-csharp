@@ -1,6 +1,4 @@
-﻿using Lib;
-
-namespace AdventOfCode.Y2023.Day11;
+﻿namespace AdventOfCode.Y2023.Day11;
 
 internal class Solution(string input) : ISolver(input)
 {
