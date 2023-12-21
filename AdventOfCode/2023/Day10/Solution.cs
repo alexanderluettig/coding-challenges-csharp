@@ -1,10 +1,20 @@
 ﻿using System.Text;
 
-namespace AdventOfCode._2023.Day10;
+namespace AdventOfCode.Y2023.Day10;
 
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override long SolvePartTwo()
+    {
+        throw new NotImplementedException();
+    }
+
+    private static async Task Method()
     {
         await using var stream = typeof(Program).Assembly
         .GetManifestResourceStream(typeof(Program), "input.txt");

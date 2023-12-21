@@ -1,30 +1,37 @@
-﻿using System.Text;
+﻿namespace AdventOfCode.Y2023.Day9;
 
-namespace AdventOfCode._2023.Day9;
-
-internal class Program
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
-
         var result = 0L;
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var numbers = line.Split(" ").Select(long.Parse).ToArray();
+            var list = CalculateNextRows(numbers);
+
+            var temp = 0L;
+            foreach (var row in list)
+            {
+                temp += row.Last();
+            }
+
+            result += temp;
+        }
+
+        return result;
+    }
+
+    public override long SolvePartTwo()
+    {
+        var result = 0L;
+        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var numbers = line.Split(" ").Select(long.Parse).ToArray();
             var list = CalculateNextRows(numbers);
 
             var temp = 0L;
 
-            //Part 1
-            // foreach (var row in list)
-            // {
-            //     temp += row.Last();
-            // }
-
-            //Part 2
             foreach (var row in list.Reverse())
             {
                 temp = row.First() - temp;
@@ -33,7 +40,7 @@ internal class Program
             result += temp;
         }
 
-        Console.WriteLine(result);
+        return result;
     }
 
     private static long[][] CalculateNextRows(long[] numbers)

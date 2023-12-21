@@ -1,35 +1,49 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text;
 
-namespace AdventOfCode._2023.Day7;
+namespace AdventOfCode.Y2023.Day7;
 
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
-
         var hands = new List<Hand>();
 
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var lineParts = line.Split(' ');
             var cards = lineParts[0].Select(x => x.ToString()).ToArray();
             var bet = int.Parse(lineParts[1]);
-            var hand = new Hand(cards, bet);
+            var hand = new Hand(cards, bet, Hand.ParseCardPartOne);
 
             hands.Add(hand);
         }
 
         hands.Sort();
 
-        long result = hands
+        return hands
             .Select((x, i) => (long)x.Bet * (i + 1))
             .Sum();
+    }
 
-        Console.WriteLine(result);
+    public override long SolvePartTwo()
+    {
+        var hands = new List<Hand>();
+
+        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var lineParts = line.Split(' ');
+            var cards = lineParts[0].Select(x => x.ToString()).ToArray();
+            var bet = int.Parse(lineParts[1]);
+            var hand = new Hand(cards, bet, Hand.ParseCardPartTwo);
+
+            hands.Add(hand);
+        }
+
+        hands.Sort();
+
+        return hands
+            .Select((x, i) => (long)x.Bet * (i + 1))
+            .Sum();
     }
 }
 
@@ -38,24 +52,24 @@ class Hand : IComparable<Hand>
     public Card[] Cards { get; internal set; } = [];
     public int Bet { get; internal set; }
     public HandType Type { get; internal set; }
-    private int NumberOfJacks => Cards.Count(x => x == Card.Jack);
 
-    public Hand(string[] cards, int bet)
+    public Hand(string[] cards, int bet, Func<string, Card> parseCard)
     {
-        Cards = cards.Select(ParseCard).ToArray();
+        Cards = cards.Select(parseCard).ToArray();
         Bet = bet;
 
-        DetermineHandType();
+        Type = DetermineHandType(Cards);
     }
 
-    private void DetermineHandType()
+    private static HandType DetermineHandType(Card[] cards)
     {
+        var NumberOfJacks = cards.Count(x => x == Card.JackPartTwo);
         var cardCounts = new Dictionary<Card, int>();
-        foreach (var card in Cards)
+        foreach (var card in cards)
         {
-            if (cardCounts.ContainsKey(card))
+            if (cardCounts.TryGetValue(card, out int value))
             {
-                cardCounts[card]++;
+                cardCounts[card] = ++value;
             }
             else
             {
@@ -63,39 +77,39 @@ class Hand : IComparable<Hand>
             }
         }
 
-        var dictWithOutJacks = cardCounts.Where(x => x.Key != Card.Jack).ToDictionary(x => x.Key, x => x.Value);
+        var dictWithOutJacks = cardCounts.Where(x => x.Key != Card.JackPartTwo).ToDictionary(x => x.Key, x => x.Value);
 
         if (cardCounts.ContainsValue(5) || dictWithOutJacks.ContainsValue(5 - NumberOfJacks))
         {
-            Type = HandType.FiveOfAKind;
+            return HandType.FiveOfAKind;
         }
         else if (cardCounts.ContainsValue(4) || dictWithOutJacks.ContainsValue(4 - NumberOfJacks))
         {
-            Type = HandType.FourOfAKind;
+            return HandType.FourOfAKind;
         }
         else if ((cardCounts.ContainsValue(3) && cardCounts.ContainsValue(2)) || (dictWithOutJacks.Count(x => x.Value == 2) == 2 && NumberOfJacks == 1))
         {
-            Type = HandType.FullHouse;
+            return HandType.FullHouse;
         }
         else if (cardCounts.ContainsValue(3) || dictWithOutJacks.ContainsValue(3 - NumberOfJacks))
         {
-            Type = HandType.ThreeOfAKind;
+            return HandType.ThreeOfAKind;
         }
         else if (cardCounts.Count(x => x.Value == 2) == 2 || (dictWithOutJacks.Count(x => x.Value == 2) == 1 && NumberOfJacks == 1))
         {
-            Type = HandType.TwoPair;
+            return HandType.TwoPair;
         }
         else if (cardCounts.ContainsValue(2) || dictWithOutJacks.ContainsValue(2 - NumberOfJacks))
         {
-            Type = HandType.Pair;
+            return HandType.Pair;
         }
         else
         {
-            Type = HandType.HighCard;
+            return HandType.HighCard;
         }
     }
 
-    private static Card ParseCard(string card)
+    public static Card ParseCardPartOne(string card)
     {
         return card switch
         {
@@ -108,7 +122,28 @@ class Hand : IComparable<Hand>
             "8" => Card.Eight,
             "9" => Card.Nine,
             "T" => Card.Ten,
-            "J" => Card.Jack,
+            "J" => Card.JackPartOne,
+            "Q" => Card.Queen,
+            "K" => Card.King,
+            "A" => Card.Ace,
+            _ => throw new ArgumentException($"Invalid card: {card}", nameof(card)),
+        };
+    }
+
+    public static Card ParseCardPartTwo(string card)
+    {
+        return card switch
+        {
+            "2" => Card.Two,
+            "3" => Card.Three,
+            "4" => Card.Four,
+            "5" => Card.Five,
+            "6" => Card.Six,
+            "7" => Card.Seven,
+            "8" => Card.Eight,
+            "9" => Card.Nine,
+            "T" => Card.Ten,
+            "J" => Card.JackPartTwo,
             "Q" => Card.Queen,
             "K" => Card.King,
             "A" => Card.Ace,
@@ -163,7 +198,7 @@ enum HandType
 
 enum Card
 {
-    Jack,
+    JackPartTwo,
     Two,
     Three,
     Four,
@@ -173,6 +208,7 @@ enum Card
     Eight,
     Nine,
     Ten,
+    JackPartOne,
     Queen,
     King,
     Ace

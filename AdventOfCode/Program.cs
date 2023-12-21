@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
-using AdventOfCode.Y2023.Day6;
+using AdventOfCode.Y2023.Day11;
 
 namespace AdventOfCode;
 internal class Program

@@ -1,23 +1,50 @@
-﻿using System.Text;
+﻿namespace AdventOfCode.Y2023.Day8;
 
-namespace AdventOfCode._2023.Day8;
-
-internal class Program
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
+        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
-        var directions = (await reader.ReadLineAsync())!.ToCharArray().Select(c => c.ToString()).ToArray();
-        await reader.ReadLineAsync();
+        var directions = inputLines[0].ToCharArray().Select(c => c.ToString()).ToArray();
 
         var map = new Dictionary<string, (string left, string right)>();
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+        foreach (var line in inputLines[1..])
         {
-            line = line.Replace(" ", "").Replace("(", "").Replace(")", "");
-            var split = line.Split("=");
+            var mapping = line.Replace(" ", "").Replace("(", "").Replace(")", "");
+            var split = mapping.Split("=");
+            var next = split[1].Split(",");
+
+            map.Add(split[0], (next[0], next[1]));
+        }
+
+        var current = "AAA";
+        var steps = 0;
+        while (current != "ZZZ")
+        {
+            current = directions[steps % directions.Length] switch
+            {
+                "L" => map[current].left,
+                "R" => map[current].right,
+                _ => throw new Exception()
+            };
+            steps++;
+        }
+
+        return steps;
+    }
+
+    public override long SolvePartTwo()
+    {
+        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+        var directions = inputLines[0].ToCharArray().Select(c => c.ToString()).ToArray();
+
+        var map = new Dictionary<string, (string left, string right)>();
+        foreach (var line in inputLines[1..])
+        {
+            var mapping = line.Replace(" ", "").Replace("(", "").Replace(")", "");
+            var split = mapping.Split("=");
             var next = split[1].Split(",");
 
             map.Add(split[0], (next[0], next[1]));
@@ -44,26 +71,13 @@ internal class Program
             foreach (var c in current)
             {
                 var index = Array.IndexOf(current, c);
-                if (c.EndsWith("Z"))
+                if (c.EndsWith('Z'))
                 {
                     distances[index] = numberOfSteps;
                 }
             }
         }
 
-        Console.WriteLine(FindLeastCommonMultiple(distances));
-    }
-
-    private static long FindLeastCommonMultiple(IEnumerable<long> numbers) =>
-        numbers.Aggregate((long)1, (current, number) => current / GreatestCommonDivisor(current, number) * number);
-
-    private static long GreatestCommonDivisor(long a, long b)
-    {
-        while (b != 0)
-        {
-            a %= b;
-            (a, b) = (b, a);
-        }
-        return a;
+        return MathAlg.FindLeastCommonMultiple(distances);
     }
 }

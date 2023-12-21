@@ -17,7 +17,7 @@ My Solutions to the [AdventOfCode](https://adventofcode.com/2023) 2023 Coding Ch
 |  7  |   ✔️   |   ✔️   |                                |
 |  8  |   ✔️   |   ✔️   |                                |
 |  9  |   ✔️   |   ✔️   |                                |
-| 10  |   ✔️   |   ✔️   |                                |
+| 10  |   x    |   x    | Fucked it up while refactoring |
 | 11  |   ✔️   |   ✔️   |                                |
 | 12  |   ✔️   |   ✔️   |                                |
 | 13  |   ✔️   |   ✔️   |                                |

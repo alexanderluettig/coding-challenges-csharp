@@ -1,35 +1,40 @@
-﻿using System.Text;
+﻿using Lib;
 
-namespace AdventOfCode._2023.Day11;
+namespace AdventOfCode.Y2023.Day11;
 
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private const int ExpansionSize = 1000000;
-    private static async Task Method(string[] args)
-    {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
 
-        string[][] input = [];
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+    public override long SolvePartOne()
+    {
+        return Calculate(2);
+    }
+
+    public override long SolvePartTwo()
+    {
+        return Calculate(1000000);
+    }
+    private long Calculate(int expansionSize)
+    {
+        string[][] map = [];
+        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var currentLine = line.ToCharArray().Select(c => c.ToString()).ToArray();
 
             if (currentLine.All(c => c == "."))
             {
-                input = [.. input, line.Replace(".", ExpansionSize.ToString()).ToCharArray().Select(c => c.ToString()).ToArray()];
+                map = [.. map, line.Replace(".", expansionSize.ToString()).ToCharArray().Select(c => c.ToString()).ToArray()];
             }
             else
             {
-                input = [.. input, currentLine];
+                map = [.. map, currentLine];
             }
         }
 
         int[] indexes = [];
-        for (var i = 0; i < input[0].Length; i++)
+        for (var i = 0; i < map[0].Length; i++)
         {
-            var onlyDots = input.All(x => x[i] != "#");
+            var onlyDots = map.All(x => x[i] != "#");
             if (onlyDots)
             {
                 indexes = [.. indexes, i];
@@ -38,36 +43,36 @@ internal class Solution
 
         foreach (var i in indexes)
         {
-            input = ReplaceColumn(input, i);
+            map = ReplaceColumn(map, i, expansionSize);
         }
 
         Coordinate[] coords = [];
-        for (var i = 0; i < input.Length; i++)
+        for (var i = 0; i < map.Length; i++)
         {
-            for (var j = 0; j < input[i].Length; j++)
+            for (var j = 0; j < map[i].Length; j++)
             {
-                if (input[i][j] == "#")
+                if (map[i][j] == "#")
                 {
                     coords = [.. coords, new(i, j)];
                 }
             }
         }
 
-        var combinations = GetCoordinateCombinations(coords);
-        Console.WriteLine(combinations.Select(x => CalculateManhattanDistance(x, input)).Sum());
+        var combinations = Combinations.GetAllCombinations(coords, 2);
+        return combinations.Select(x => CalculateManhattanDistance((x[0], x[1]), map, expansionSize)).Sum();
     }
 
-    private static string[][] ReplaceColumn(string[][] input, int v)
+    private static string[][] ReplaceColumn(string[][] input, int v, int expansionSize)
     {
         for (var i = 0; i < input.Length; i++)
         {
-            input[i][v] = ExpansionSize.ToString();
+            input[i][v] = expansionSize.ToString();
         }
 
         return input;
     }
 
-    private static long CalculateManhattanDistance((Coordinate start, Coordinate end) combination, string[][] input)
+    private static long CalculateManhattanDistance((Coordinate start, Coordinate end) combination, string[][] input, int expansionSize)
     {
         var (start, end) = combination;
         var distanceWithOutExtraRowsAndColumns = Math.Abs(start.Row - end.Row) + Math.Abs(start.Column - end.Column);
@@ -94,7 +99,7 @@ internal class Solution
             }
         }
 
-        return distanceWithOutExtraRowsAndColumns + ((extraRows + extraColumns) * (ExpansionSize - 1));
+        return distanceWithOutExtraRowsAndColumns + ((extraRows + extraColumns) * (expansionSize - 1));
     }
 
     private static (Coordinate start, Coordinate end)[] GetCoordinateCombinations(Coordinate[] coordinates)
