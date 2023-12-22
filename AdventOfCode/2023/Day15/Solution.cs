@@ -1,17 +1,25 @@
 ﻿using System.Collections.Specialized;
 using System.Text;
 
-namespace AdventOfCode._2023.Day15;
+namespace AdventOfCode.Y2023.Day15;
 
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
+        var input = _input.Replace("\n", "").Split(",");
+        var result = 0;
+        foreach (var entry in input)
+        {
+            result += Hash(entry);
+        }
 
-        var input = (await reader.ReadToEndAsync()).Replace("\n", "").Split(",");
+        return result;
+    }
+
+    public override long SolvePartTwo()
+    {
+        var input = _input.Replace("\n", "").Split(",");
 
         var boxes = new OrderedDictionary[256];
         foreach (var entry in input)
@@ -37,8 +45,6 @@ internal class Solution
             }
         }
 
-
-
         var result = 0;
         for (var i = 0; i < 256; i++)
         {
@@ -53,7 +59,7 @@ internal class Solution
             }
         }
 
-        Console.WriteLine(result);
+        return result;
     }
 
     static int Hash(string input)

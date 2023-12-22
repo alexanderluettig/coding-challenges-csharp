@@ -4,7 +4,7 @@ internal class Solution(string input) : ISolver(input)
 {
     public override long SolvePartOne()
     {
-        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var inputLines = _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         var times = inputLines[0][5..].Split(" ", StringSplitOptions.RemoveEmptyEntries);
         var distances = inputLines[1][9..].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
@@ -18,7 +18,7 @@ internal class Solution(string input) : ISolver(input)
 
     public override long SolvePartTwo()
     {
-        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var inputLines = _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
         var time = long.Parse(inputLines[0][5..].Replace(" ", ""));
         var distance = long.Parse(inputLines[1][9..].Replace(" ", ""));

@@ -15,7 +15,7 @@ internal class Solution(string input) : ISolver(input)
     private long Calculate(int expansionSize)
     {
         string[][] map = [];
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var currentLine = line.ToCharArray().Select(c => c.ToString()).ToArray();
 

@@ -13,7 +13,7 @@ internal class Solution(string input) : ISolver(input)
     {
         var schematic = Array.Empty<string[]>();
 
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var split = line.ToCharArray().Select(c => c.ToString()).ToArray();
             schematic = [.. schematic, split];
@@ -65,7 +65,7 @@ internal class Solution(string input) : ISolver(input)
         var numbers = new List<Part>();
 
         int row = 0;
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             gears.AddRange(new Regex(@"\*").Matches(line).Select(g => new Part(g.Value, row, g.Index)));
             numbers.AddRange(new Regex(@"\d+").Matches(line).Select(g => new Part(g.Value, row, g.Index)));

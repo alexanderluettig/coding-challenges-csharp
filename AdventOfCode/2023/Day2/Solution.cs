@@ -11,7 +11,7 @@ internal class Solution(string input) : ISolver(input)
     public override long SolvePartOne()
     {
         var result = 0;
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var extractedGameIdString = Regex.Replace(line, @"Game (\d{1,3})", "$1");
             var game = extractedGameIdString.Split(":");
@@ -67,7 +67,7 @@ internal class Solution(string input) : ISolver(input)
     public override long SolvePartTwo()
     {
         var result = 0;
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var game = line.Split(":");
             var rounds = game[1].Split(";");

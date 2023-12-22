@@ -8,7 +8,7 @@ internal class Solution(string input) : ISolver(input)
     {
         var hands = new List<Hand>();
 
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var lineParts = line.Split(' ');
             var cards = lineParts[0].Select(x => x.ToString()).ToArray();
@@ -29,7 +29,7 @@ internal class Solution(string input) : ISolver(input)
     {
         var hands = new List<Hand>();
 
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var lineParts = line.Split(' ');
             var cards = lineParts[0].Select(x => x.ToString()).ToArray();

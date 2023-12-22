@@ -9,7 +9,7 @@ internal class Solution(string input) : ISolver(input)
     {
         int counter = 0;
 
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var lineWithoutCharacters = Regex.Replace(line, @"\D", "");
             var numberString = lineWithoutCharacters[0].ToString() + lineWithoutCharacters[^1].ToString();
@@ -23,7 +23,7 @@ internal class Solution(string input) : ISolver(input)
     {
         long counter = 0;
 
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var newLine = "";
             for (int i = 0; i < line.Length; i++)

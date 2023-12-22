@@ -1,17 +1,30 @@
 ﻿using System.Text;
 
-namespace AdventOfCode._2023.Day14;
+namespace AdventOfCode.Y2023.Day14;
 
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
-
         string[][] map = [];
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        {
+            map = [.. map, line.Select(c => c.ToString()).ToArray()];
+        }
+
+        map = RollInDirection(map, Direction.North).Transpose();
+
+        return map.Select((row, y) =>
+        {
+            var numberOfRelevantRocks = row.Count(c => c == "O");
+            return numberOfRelevantRocks * (map.Length - y);
+        }).Sum();
+    }
+
+    public override long SolvePartTwo()
+    {
+        string[][] map = [];
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             map = [.. map, line.Select(c => c.ToString()).ToArray()];
         }
@@ -35,12 +48,11 @@ internal class Solution
             }
         }
 
-        var result = map.Select((row, y) =>
+        return map.Select((row, y) =>
         {
             var numberOfRelevantRocks = row.Count(c => c == "O");
             return numberOfRelevantRocks * (map.Length - y);
         }).Sum();
-        Console.WriteLine(result);
     }
 
     public static string[][] Cycle(string[][] map)
@@ -76,16 +88,6 @@ internal class Solution
         }).ToArray();
 
         return map;
-    }
-
-    private static int Comparer(string a, string b)
-    {
-        if (a == "#" || b == "#")
-        {
-            return 0;
-        }
-
-        return b.CompareTo(a);
     }
 
     private enum Direction

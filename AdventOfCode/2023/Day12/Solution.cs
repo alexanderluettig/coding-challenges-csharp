@@ -1,34 +1,44 @@
-﻿using System.Text;
+﻿namespace AdventOfCode.Y2023.Day12;
 
-namespace AdventOfCode._2023.Day12;
-
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static IDictionary<string, long> Cache = new Dictionary<string, long>();
-    private static async Task Method(string[] args)
-    {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
+    private static readonly Dictionary<string, long> Cache = [];
 
-        var part1 = 0L;
-        var part2 = 0L;
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+    public override long SolvePartOne()
+    {
+        Cache.Clear();
+        var result = 0L;
+
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var lineParts = line.Split(" ");
             var springs = lineParts[0];
             var groups = lineParts[1].Split(",").Select(int.Parse).ToList();
 
-            part1 += Calculate(springs, groups);
+            result += Calculate(springs, groups);
+        }
+
+        return result;
+    }
+
+    public override long SolvePartTwo()
+    {
+        Cache.Clear();
+        var result = 0L;
+
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var lineParts = line.Split(" ");
+            var springs = lineParts[0];
+            var groups = lineParts[1].Split(",").Select(int.Parse).ToList();
 
             springs = string.Join('?', Enumerable.Repeat(springs, 5));
             groups = Enumerable.Repeat(groups, 5).SelectMany(g => g).ToList();
 
-            part2 += Calculate(springs, groups);
+            result += Calculate(springs, groups);
         }
 
-        Console.WriteLine($"Part 1: {part1}");
-        Console.WriteLine($"Part 2: {part2}");
+        return result;
     }
 
     private static long Calculate(string springs, List<int> groups)

@@ -7,7 +7,7 @@ internal class Solution(string input) : ISolver(input)
 {
     public override long SolvePartOne()
     {
-        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var inputLines = _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         var result = 0;
         foreach (var line in inputLines)
         {
@@ -49,7 +49,7 @@ internal class Solution(string input) : ISolver(input)
     public override long SolvePartTwo()
     {
         var currentScratchCard = 1;
-        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var inputLines = _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         var numberOfScratchCards = inputLines.Length;
         var scratchCardsAmount = new Dictionary<int, int>();
 

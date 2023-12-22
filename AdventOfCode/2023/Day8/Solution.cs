@@ -4,7 +4,7 @@ internal class Solution(string input) : ISolver(input)
 {
     public override long SolvePartOne()
     {
-        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var inputLines = _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
         var directions = inputLines[0].ToCharArray().Select(c => c.ToString()).ToArray();
 
@@ -36,7 +36,7 @@ internal class Solution(string input) : ISolver(input)
 
     public override long SolvePartTwo()
     {
-        var inputLines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var inputLines = _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
         var directions = inputLines[0].ToCharArray().Select(c => c.ToString()).ToArray();
 

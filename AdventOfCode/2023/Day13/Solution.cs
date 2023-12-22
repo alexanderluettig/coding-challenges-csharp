@@ -1,37 +1,51 @@
-﻿using System.Text;
-namespace AdventOfCode._2023.Day13;
+﻿namespace AdventOfCode.Y2023.Day13;
 
-internal class Solution
+internal class Solution(string input) : ISolver(input)
 {
-    private static async Task Method(string[] args)
+    public override long SolvePartOne()
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
-
-        string[][] input = [];
-        var part1 = 0;
-        var part2 = 0;
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+        string[][] map = [];
+        var result = 0;
+        foreach (var line in _input.Split(Environment.NewLine))
         {
             if (line == "")
             {
-                part1 += CalculatePart1(input);
-                part2 += CalculatePart2(input);
-                input = [];
+                result += CalculatePart1(map);
+                map = [];
                 continue;
             }
             else
             {
-                input = [.. input, line.ToCharArray().Select(c => c.ToString()).ToArray()];
+                map = [.. map, line.ToCharArray().Select(c => c.ToString()).ToArray()];
             }
         }
 
-        part1 += CalculatePart1(input);
-        part2 += CalculatePart2(input);
+        result += CalculatePart2(map);
 
-        Console.WriteLine($"Part 1: {part1}");
-        Console.WriteLine($"Part 2: {part2}");
+        return result;
+    }
+
+    public override long SolvePartTwo()
+    {
+        string[][] map = [];
+        var result = 0;
+        foreach (var line in _input.Split(Environment.NewLine))
+        {
+            if (line == "")
+            {
+                result += CalculatePart2(map);
+                map = [];
+                continue;
+            }
+            else
+            {
+                map = [.. map, line.ToCharArray().Select(c => c.ToString()).ToArray()];
+            }
+        }
+
+        result += CalculatePart2(map);
+
+        return result;
     }
 
     private static int CalculatePart1(string[][] input)

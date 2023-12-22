@@ -1,6 +1,8 @@
-﻿int[] test = Enumerable.Range(0, 10).ToArray();
+﻿string[] test = ["e", "r", "a", "d", "i", "o"];
 
-foreach (int[] combination in Combinations.GetAllCombinations(test, 3))
+var permutations = test.Select(x => x).GetPermutations(test.Length).ToList();
+
+foreach (var permutation in permutations)
 {
-    Console.WriteLine(string.Join(", ", combination));
+    Console.WriteLine(string.Join("", permutation));
 }

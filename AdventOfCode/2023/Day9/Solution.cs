@@ -5,7 +5,7 @@ internal class Solution(string input) : ISolver(input)
     public override long SolvePartOne()
     {
         var result = 0L;
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var numbers = line.Split(" ").Select(long.Parse).ToArray();
             var list = CalculateNextRows(numbers);
@@ -25,7 +25,7 @@ internal class Solution(string input) : ISolver(input)
     public override long SolvePartTwo()
     {
         var result = 0L;
-        foreach (var line in input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in _input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
         {
             var numbers = line.Split(" ").Select(long.Parse).ToArray();
             var list = CalculateNextRows(numbers);

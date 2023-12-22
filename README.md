@@ -16,14 +16,10 @@ It also contains a Library which implements useful algorithms for e.g. "Pathfind
 
 ## TODO
 
-- Refactor Project
-
-  - Refactor AdventOfCode 2023 => Status 11/16
-
 - AdventOfCode
 
   - 2023
-    - Day 11
+    - Day 5, 10
     - Finish Rest
   - 2022
   - 2021

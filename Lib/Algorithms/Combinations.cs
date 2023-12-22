@@ -4,7 +4,7 @@ public static class Combinations
 {
     // Enumerate all possible m-size combinations of [0, 1, ..., n-1] array
     // in lexicographic order (first [0, 1, 2, ..., m-1]).
-    private static IEnumerable<int[]> GetCombinationFromMToN(int m, int n)
+    private static IEnumerable<int[]> GetAllIntCombinations(int m, int n)
     {
         int[] result = new int[m];
         var stack = new Stack<int>(m);
@@ -31,7 +31,7 @@ public static class Combinations
         if (m < 1)
             throw new ArgumentException("Number of selected elements can't be less than 1");
         T[] result = new T[m];
-        foreach (int[] j in GetCombinationFromMToN(m, array.Length))
+        foreach (int[] j in GetAllIntCombinations(m, array.Length))
         {
             for (int i = 0; i < m; i++)
             {
