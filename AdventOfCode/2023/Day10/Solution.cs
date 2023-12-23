@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using Lib;
 
 namespace AdventOfCode.Y2023.Day10;
 
@@ -6,48 +6,124 @@ internal class Solution(string input) : ISolver(input)
 {
     public override long SolvePartOne()
     {
-        throw new NotImplementedException();
+        var map = new Map<string>("#", _input.Split(Environment.NewLine).Select(x => x.ToCharArray().Select(y => y.ToString())));
+        var result = 0;
+
+        var current = map.Find("S").First();
+        var direction = Direction.Up;
+        do
+        {
+            (direction, current) = GetNextDirection(current, direction, map);
+            result++;
+        } while (current.Value != "S");
+
+        return result / 2;
     }
 
     public override long SolvePartTwo()
     {
-        throw new NotImplementedException();
+        var map = new Map<string>("#", _input.Split(Environment.NewLine).Select(x => x.ToCharArray().Select(y => y.ToString())));
+        var walls = new Map<string>(".", map.Height, map.Width);
+
+        var current = map.Find("S").First();
+        var direction = Direction.Up;
+        do
+        {
+            walls[current] = map[current];
+            (direction, current) = GetNextDirection(current, direction, map);
+        } while (current.Value != "S");
+
+        Console.WriteLine(walls);
+
+        return -1;
     }
 
-    private static async Task Method()
+    private static (Vector2d direction, Point2D<string> next) GetNextDirection(Vector2d current, Vector2d prevDirection, Map<string> map)
     {
-        await using var stream = typeof(Program).Assembly
-        .GetManifestResourceStream(typeof(Program), "input.txt");
-        using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
-
-        string[][] map = [];
-
-        var row = 0;
-        (int col, int row) start = (-1, -1);
-        for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
+        if (map[current] == "S")
         {
-            map = [.. map, line.Select(c => c.ToString()).ToArray()];
+            if (map.TryGet(current + Direction.Up, out var up) && (up.Value is "|" or "7" or "F"))
+                return (Direction.Up, up);
 
-            if (line.Contains('S'))
+            if (map.TryGet(current + Direction.Down, out var down) && (down.Value is "|" or "L" or "J"))
+                return (Direction.Down, down);
+
+            if (map.TryGet(current + Direction.Left, out var left) && (left.Value is "-" or "L" or "F"))
+                return (Direction.Left, left);
+
+            if (map.TryGet(current + Direction.Right, out var right) && (right.Value is "-" or "J" or "7"))
+                return (Direction.Right, right);
+        }
+        else if (map[current] == "|")
+        {
+            if (prevDirection == Direction.Up)
             {
-                var col = line.IndexOf('S');
-                start = (col, row);
+                return (Direction.Up, map.TryGet(current + Direction.Up, out var up) ? up : throw new Exception("No Up"));
             }
-
-            row++;
+            else if (prevDirection == Direction.Down)
+            {
+                return (Direction.Down, map.TryGet(current + Direction.Down, out var down) ? down : throw new Exception("No Down"));
+            }
         }
-
-        var steps = 0;
-        (int col, int row) previousPosition = (-1, -1);
-        for (var currentPosition = start; currentPosition != start || steps == 0; steps++)
+        else if (map[current] == "-")
         {
-            var tempPos = GetNextPosition(map, currentPosition, previousPosition);
-            previousPosition = currentPosition;
-            currentPosition = tempPos;
+            if (prevDirection == Direction.Left)
+            {
+                return (Direction.Left, map.TryGet(current + Direction.Left, out var left) ? left : throw new Exception("No Left"));
+            }
+            else if (prevDirection == Direction.Right)
+            {
+                return (Direction.Right, map.TryGet(current + Direction.Right, out var right) ? right : throw new Exception("No Right"));
+            }
+        }
+        else if (map[current] == "L")
+        {
+            if (prevDirection == Direction.Down)
+            {
+                return (Direction.Right, map.TryGet(current + Direction.Right, out var right) ? right : throw new Exception("No Right"));
+            }
+            else if (prevDirection == Direction.Left)
+            {
+                return (Direction.Up, map.TryGet(current + Direction.Up, out var up) ? up : throw new Exception("No Up"));
+            }
+        }
+        else if (map[current] == "J")
+        {
+            if (prevDirection == Direction.Down)
+            {
+                return (Direction.Left, map.TryGet(current + Direction.Left, out var left) ? left : throw new Exception("No Left"));
+            }
+            else if (prevDirection == Direction.Right)
+            {
+                return (Direction.Up, map.TryGet(current + Direction.Up, out var up) ? up : throw new Exception("No Up"));
+            }
+        }
+        else if (map[current] == "7")
+        {
+            if (prevDirection == Direction.Up)
+            {
+                return (Direction.Left, map.TryGet(current + Direction.Left, out var left) ? left : throw new Exception("No Left"));
+            }
+            else if (prevDirection == Direction.Right)
+            {
+                return (Direction.Down, map.TryGet(current + Direction.Down, out var down) ? down : throw new Exception("No Down"));
+            }
+        }
+        else if (map[current] == "F")
+        {
+            if (prevDirection == Direction.Up)
+            {
+                return (Direction.Right, map.TryGet(current + Direction.Right, out var right) ? right : throw new Exception("No Right"));
+            }
+            else if (prevDirection == Direction.Left)
+            {
+                return (Direction.Down, map.TryGet(current + Direction.Down, out var down) ? down : throw new Exception("No Down"));
+            }
         }
 
-        Console.WriteLine(steps / 2);
+        throw new Exception("No Direction");
     }
+
 
     /*
     | is a vertical pipe connecting north and south. Up and Down
@@ -64,82 +140,4 @@ internal class Solution(string input) : ISolver(input)
     S Down: |, L, J
     For S direction is not relevant
     */
-    private static (int col, int row) GetNextPosition(string[][] map, (int col, int row) currentPosition, (int col, int row) previousPosition)
-    {
-        var (col, row) = currentPosition;
-        var direction = GetDirection(currentPosition, previousPosition);
-
-        switch (map[row][col])
-        {
-            case "S":
-                if (col > 0 && map[row][col - 1] is "-" or "L" or "F")
-                    return (col - 1, row);
-                if (col < map[row].Length && map[row][col + 1] is "-" or "J" or "7")
-                    return (col + 1, row);
-                if (row > 0 && map[row - 1][col] is "|" or "7" or "F")
-                    return (col, row - 1);
-                if (row < map.Length && map[row + 1][col] is "|" or "L" or "J")
-                    return (col, row + 1);
-                throw new Exception("No valid next position");
-            case "|":
-                if (direction == Direction.Up)
-                    return (col, row - 1);
-                if (direction == Direction.Down)
-                    return (col, row + 1);
-                throw new Exception("No valid next position");
-            case "-":
-                if (direction == Direction.Left)
-                    return (col - 1, row);
-                if (direction == Direction.Right)
-                    return (col + 1, row);
-                throw new Exception("No valid next position");
-            case "L":
-                if (direction == Direction.Down)
-                    return (col + 1, row);
-                if (direction == Direction.Left)
-                    return (col, row - 1);
-                throw new Exception("No valid next position");
-            case "J":
-                if (direction == Direction.Down)
-                    return (col - 1, row);
-                if (direction == Direction.Right)
-                    return (col, row - 1);
-                throw new Exception("No valid next position");
-            case "7":
-                if (direction == Direction.Up)
-                    return (col - 1, row);
-                if (direction == Direction.Right)
-                    return (col, row + 1);
-                throw new Exception("No valid next position");
-            case "F":
-                if (direction == Direction.Up)
-                    return (col + 1, row);
-                if (direction == Direction.Left)
-                    return (col, row + 1);
-                throw new Exception("No valid next position");
-            default:
-                throw new ArgumentOutOfRangeException("Unknown Character", nameof(map));
-        }
-    }
-
-    private static Direction GetDirection((int col, int row) currentPosition, (int col, int row) previousPosition)
-    {
-        var (col, row) = currentPosition;
-        var (previousCol, previousRow) = previousPosition;
-
-        if (col == previousCol)
-        {
-            return row > previousRow ? Direction.Down : Direction.Up;
-        }
-
-        return col > previousCol ? Direction.Right : Direction.Left;
-    }
-
-    private enum Direction
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
 }

@@ -19,7 +19,7 @@ It also contains a Library which implements useful algorithms for e.g. "Pathfind
 - AdventOfCode
 
   - 2023
-    - Day 5, 10
+    - Day 10
     - Finish Rest
   - 2022
   - 2021

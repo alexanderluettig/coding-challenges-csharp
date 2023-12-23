@@ -9,7 +9,7 @@ public class Map<T> where T : notnull
     private T[,] Data { get; init; }
     private readonly T _defaultValue;
 
-    public Map(int height, int width, T defaultValue)
+    public Map(T defaultValue, int height, int width)
     {
         Width = width;
         Height = height;
@@ -35,9 +35,30 @@ public class Map<T> where T : notnull
         Data = data;
     }
 
+    public Map(T defaultValue, IEnumerable<IEnumerable<T>> data)
+    {
+        Width = data.First().Count();
+        Height = data.Count();
+        _defaultValue = defaultValue;
+
+        Data = new T[Height, Width];
+        var y = 0;
+        foreach (var row in data)
+        {
+            var x = 0;
+            foreach (var item in row)
+            {
+                Data[y, x] = item;
+                x++;
+            }
+
+            y++;
+        }
+    }
+
     public Map<T> RotateRight()
     {
-        var rotatedMap = new Map<T>(Height, Width, _defaultValue);
+        var rotatedMap = new Map<T>(_defaultValue, Height, Width);
 
         for (var y = 0; y < Height; y++)
         {
@@ -52,7 +73,7 @@ public class Map<T> where T : notnull
 
     public Map<T> RotateLeft()
     {
-        var rotatedMap = new Map<T>(Height, Width, _defaultValue);
+        var rotatedMap = new Map<T>(_defaultValue, Height, Width);
 
         for (var y = 0; y < Height; y++)
         {
@@ -67,7 +88,7 @@ public class Map<T> where T : notnull
 
     public Map<T> FlipHorizontal()
     {
-        var flippedMap = new Map<T>(Width, Height, _defaultValue);
+        var flippedMap = new Map<T>(_defaultValue, Height, Width);
 
         for (var y = 0; y < Height; y++)
         {
@@ -82,7 +103,7 @@ public class Map<T> where T : notnull
 
     public Map<T> FlipVertical()
     {
-        var flippedMap = new Map<T>(Width, Height, _defaultValue);
+        var flippedMap = new Map<T>(_defaultValue, Height, Width);
 
         for (var y = 0; y < Height; y++)
         {
@@ -97,7 +118,7 @@ public class Map<T> where T : notnull
 
     public Map<T> Transpose()
     {
-        var transposedMap = new Map<T>(Width, Height, _defaultValue);
+        var transposedMap = new Map<T>(_defaultValue, Height, Width);
 
         for (var y = 0; y < Height; y++)
         {
@@ -110,11 +131,58 @@ public class Map<T> where T : notnull
         return transposedMap;
     }
 
+    public IEnumerable<Point2D<T>> Find(T item)
+    {
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                if (Data[y, x].Equals(item))
+                {
+                    yield return new Point2D<T>(x, y, item);
+                }
+            }
+        }
+    }
+
+    public bool TryGet(Vector2d point, out Point2D<T> item)
+    {
+        if (point.X < 0 || point.X >= Width || point.Y < 0 || point.Y >= Height)
+        {
+            item = new Point2D<T>(point.X, point.Y, _defaultValue);
+            return false;
+        }
+
+        item = new Point2D<T>(point.X, point.Y, Data[(int)point.Y, (int)point.X]);
+        return true;
+    }
+
+    public Map<T> Copy()
+    {
+        var copy = new Map<T>(_defaultValue, Height, Width);
+
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                copy[y, x] = Data[y, x];
+            }
+        }
+
+        return copy;
+    }
+
     #region Operator Overloads
     public T this[int y, int x]
     {
         get => Data[y, x];
         set => Data[y, x] = value;
+    }
+
+    public T this[Vector2d point]
+    {
+        get => Data[(int)point.Y, (int)point.X];
+        set => Data[(int)point.Y, (int)point.X] = value;
     }
 
     public T[] this[int index]
