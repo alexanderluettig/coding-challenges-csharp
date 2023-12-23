@@ -1,9 +1,11 @@
-﻿namespace LeetCode.Solved;
+﻿using LeetCode.Solved;
+
+namespace LeetCode;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        TestRunner.Run<Solution1422>();
+        TestRunner.Run<Solution32>();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace LeetCode;
+﻿using System.Diagnostics;
+
+namespace LeetCode;
 
 public class TestRunner
 {
@@ -9,6 +11,9 @@ public class TestRunner
             .Where(m => m.GetCustomAttributes(typeof(TestAttribute), false).Length > 0);
 
         var instance = Activator.CreateInstance<T>();
+
+        Stopwatch sw = new();
+        sw.Start();
 
         foreach (var testMethod in testMethods)
         {
@@ -22,5 +27,8 @@ public class TestRunner
                 Console.WriteLine($"{testMethod.Name} failed: {e.InnerException?.Message}");
             }
         }
+
+        sw.Stop();
+        Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds}ms");
     }
 }
