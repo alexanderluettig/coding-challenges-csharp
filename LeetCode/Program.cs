@@ -6,6 +6,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        TestRunner.Run<Solution32>();
+        TestRunner.Run<Solution1758>();
     }
 }
