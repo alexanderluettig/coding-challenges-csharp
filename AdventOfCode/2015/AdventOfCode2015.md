@@ -8,7 +8,7 @@ My Solutions to the [AdventOfCode](https://adventofcode.com/2015) 2015 Coding Ch
 
 |            Day            | Part 1 | Part 2 | Comment |
 | :-----------------------: | :----: | :----: | :-----: |
-|  [1](./Day1/Solution.cs)  |   X    |   X    |         |
+|  [1](./Day1/Solution.cs)  |   ✔️   |   ✔️   |         |
 |  [2](./Day2/Solution.cs)  |   X    |   X    |         |
 |  [3](./Day3/Solution.cs)  |   X    |   X    |         |
 |  [4](./Day4/Solution.cs)  |   X    |   X    |         |

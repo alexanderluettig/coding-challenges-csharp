@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
-using AdventOfCode.Y2023.Day10;
+using AdventOfCode.Y2015.Day1;
 
 namespace AdventOfCode;
 internal class Program
@@ -8,7 +8,7 @@ internal class Program
     public static async Task Main(string[] args)
     {
         await using var stream = typeof(Program).Assembly
-            .GetManifestResourceStream(typeof(Program), "test.txt");
+            .GetManifestResourceStream(typeof(Program), "input.txt");
         using var reader = new StreamReader(stream!, Encoding.UTF8, leaveOpen: true);
 
         var input = await reader.ReadToEndAsync();
