@@ -12,7 +12,7 @@ It also contains a Library which implements useful algorithms for e.g. "Pathfind
 
 ## AdventOfCode
 
-- [ ] [2015](./AdventOfCode/2015/AdventOfCode2015.md) => 1/25
+- [ ] [2015](./AdventOfCode/2015/AdventOfCode2015.md) => 3/25
 - [ ] [2016](./AdventOfCode/2016/AdventOfCode2016.md) => 0/25
 - [ ] [2017](./AdventOfCode/2017/AdventOfCode2017.md) => 0/25
 - [ ] [2018](./AdventOfCode/2018/AdventOfCode2018.md) => 0/25
