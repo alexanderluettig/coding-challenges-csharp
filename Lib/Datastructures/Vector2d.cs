@@ -1,13 +1,11 @@
 ﻿namespace Lib;
 
-public class Vector2d(decimal x, decimal y)
+public struct Vector2d(decimal x, decimal y)
 {
     public decimal X { get; set; } = x;
     public decimal Y { get; set; } = y;
 
     public decimal Length => (decimal)Math.Sqrt((double)(X * X + Y * Y));
-
-    public Vector2d Copy() => new(X, Y);
 
     #region Operator Overloading
     public static Vector2d operator +(Vector2d vector1, Vector2d vector2)
@@ -45,19 +43,15 @@ public class Vector2d(decimal x, decimal y)
         return vector1.X != vector2.X || vector1.Y != vector2.Y;
     }
 
-    public override bool Equals(object? obj)
+    public override readonly bool Equals(object? obj)
     {
-        return obj is Vector2d vector && this == vector;
+        return obj is Vector2d vector && vector.X == X && vector.Y == Y;
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return HashCode.Combine(X, Y);
     }
 
-    public override string ToString()
-    {
-        return $"({X}, {Y})";
-    }
     #endregion
 }

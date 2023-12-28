@@ -1,7 +1,10 @@
 namespace Lib.Datastructures;
 
-public sealed class Point2D<T>(decimal x, decimal y, T value) : Vector2d(x, y) where T : notnull
+public sealed class Point2D<T>(decimal x, decimal y, T value) where T : notnull
 {
+    public Vector2d Position { get; set; } = new(x, y);
+    public decimal X => Position.X;
+    public decimal Y => Position.Y;
     public T Value { get; set; } = value;
 
     #region Operator Overloads

@@ -13,7 +13,7 @@ internal class Solution(string input) : ISolver(input)
         var direction = Direction.Up;
         do
         {
-            (direction, current) = GetNextDirection(current, direction, map);
+            (direction, current) = GetNextDirection(current.Position, direction, map);
             result++;
         } while (current.Value != "S");
 
@@ -29,8 +29,8 @@ internal class Solution(string input) : ISolver(input)
         var direction = Direction.Up;
         do
         {
-            walls[current] = map[current];
-            (direction, current) = GetNextDirection(current, direction, map);
+            walls[current.Position] = map[current.Position];
+            (direction, current) = GetNextDirection(current.Position, direction, map);
         } while (current.Value != "S");
 
         Console.WriteLine(walls);

@@ -41,7 +41,7 @@ internal sealed class Solution(string input) : ISolver(input)
         var santa = new Vector2d(0, 0);
         var roboSanta = new Vector2d(0, 0);
 
-        visited.Add(santa.Copy());
+        visited.Add(santa);
 
         for (int i = 0; i < _input.Length; i++)
         {
@@ -73,8 +73,8 @@ internal sealed class Solution(string input) : ISolver(input)
                     break;
             }
 
-            visited.Add(santa.Copy());
-            visited.Add(roboSanta.Copy());
+            visited.Add(santa);
+            visited.Add(roboSanta);
         }
 
         return visited.Count;
