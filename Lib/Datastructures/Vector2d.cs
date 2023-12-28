@@ -2,10 +2,12 @@
 
 public class Vector2d(decimal x, decimal y)
 {
-    public decimal X { get; internal set; } = x;
-    public decimal Y { get; internal set; } = y;
+    public decimal X { get; set; } = x;
+    public decimal Y { get; set; } = y;
 
     public decimal Length => (decimal)Math.Sqrt((double)(X * X + Y * Y));
+
+    public Vector2d Copy() => new(X, Y);
 
     #region Operator Overloading
     public static Vector2d operator +(Vector2d vector1, Vector2d vector2)
