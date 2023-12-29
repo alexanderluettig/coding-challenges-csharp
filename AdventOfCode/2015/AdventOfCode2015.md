@@ -13,7 +13,7 @@ My Solutions to the [AdventOfCode](https://adventofcode.com/2015) 2015 Coding Ch
 |  [3](./Day3/Solution.cs)  |   ✔️   |   ✔️   |         |
 |  [4](./Day4/Solution.cs)  |   ✔️   |   ✔️   |         |
 |  [5](./Day5/Solution.cs)  |   ✔️   |   ✔️   |         |
-|  [6](./Day6/Solution.cs)  |   X    |   X    |         |
+|  [6](./Day6/Solution.cs)  |   ✔️   |   ✔️   |         |
 |  [7](./Day7/Solution.cs)  |   X    |   X    |         |
 |  [8](./Day8/Solution.cs)  |   X    |   X    |         |
 |  [9](./Day9/Solution.cs)  |   X    |   X    |         |

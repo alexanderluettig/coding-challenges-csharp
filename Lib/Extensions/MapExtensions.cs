@@ -20,4 +20,18 @@ public static class MapExtensions
 
         return result;
     }
+
+    public static long Sum(this Map<int> map)
+    {
+        var result = 0L;
+        for (var y = 0; y < map.Height; y++)
+        {
+            for (var x = 0; x < map.Width; x++)
+            {
+                result += map[y, x];
+            }
+        }
+
+        return result;
+    }
 }
